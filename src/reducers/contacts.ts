@@ -49,16 +49,20 @@ const def = {type: '', payload: null};
 const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
   switch (action.type) {
   case ContactsActions.CHANGE_PRESENCE:
-    return state.set('presence', state);
+    return state.set('presence', action.payload);
+
   case ContactsActions.SELECT_CONTACT:
     const {index: sindex} = action.payload;
     return updateAvailableContact(state, sindex, 'selected', true);
+
   case ContactsActions.UNSELECT_CONTACT:
     const {index: uindex} = action.payload;
     return updateAvailableContact(state, uindex, 'selected', false);
+
   case ContactsActions.ADD_CONTACT:
     return state.mergeIn(['add'],
       { modal: true, state: AddContactState.Idle, failure: null });
+
   case ContactsActions.ADD_CONTACT_PENDING:
     return updateAllAvailableContacts(
              state.mergeIn(['add'], {
@@ -67,42 +71,48 @@ const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
              })
              .updateIn(['people'],  List(), l => l.concat(action.payload)),
           'selected', false);
+
   case ContactsActions.ADD_CONTACT_CANCEL:
     return state.mergeIn(['add'], {
       modal: false,
       state: AddContactState.Idle,
     });
+
   case ContactsActions.ADD_CONTACT_COMPLETE:
     return state.mergeIn(['add'],
       { modal: false, state: AddContactState.Idle });
+
   case ContactsActions.ADD_CONTACT_ERROR:
     return state.mergeIn(['add'], {
       failure: action.payload,
       state: AddContactState.Failed
     });
+
   case ContactsActions.REQUEST_AVAILABLE_CONTACTS:
     return state.mergeIn(['add'], {
       state: AddContactState.Loading
     });
+
   case ContactsActions.LIST_AVAILABLE_CONTACTS_FAILED:
     return state.mergeIn(['add'], {
       state: AddContactState.Failed
     });
+
   case ContactsActions.LIST_AVAILABLE_CONTACTS:
     return state
             .setIn(['availablePeople'], fromJS(action.payload))
             .mergeIn(['add'], { state: AddContactState.Idle });
+
   case SessionActions.LOGIN_USER_SUCCESS:
     const {contacts, presence} = action.payload;
 
-    return state.mergeDeep(fromJS({
-      people: contacts || [],
-      presence: presence == null
-        ? Presence.Online
-        : Presence[presence]
-    }));
+    return state
+             .set('people', fromJS(contacts || []))
+             .set('presence', presence);
+
   case SessionActions.LOGOUT_USER:
     return state.merge(INITIAL_STATE);
+
   default:
     return state;
   }

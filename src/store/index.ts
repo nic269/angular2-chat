@@ -4,23 +4,36 @@ import logger from './configure-logger';
 
 const persistState = require('redux-localstorage');
 
-export const enhancers = [
-  persistState('session', {
-    key: 'angular2-redux-seed',
+const persist = k => persistState(k, {
+  key: `angular2-chat-${k}`,
+  serialize: store => {
+    if (store == null) {
+      return null;
+    }
+    return JSON.stringify(store[k].toJS());
+  },
+  deserialize: state => {
+    if (state == null) {
+      return null;
+    }
+    const parsed = JSON.parse(state);
+    if (parsed == null) {
+      return null;
+    }
 
-    serialize: (store) => {
-      if (store == null || store.session == null) {
-        return store;
-      }
+    return {
+      [k]: state ? fromJS(parsed) : fromJS({})
+    };
+  }
+});
 
-      return JSON.stringify(store.session.toJS());
-    },
-
-    deserialize: (state) => ({
-      session: state ? fromJS(JSON.parse(state)) : fromJS({}),
-    }),
-  })
+const keys = [
+  'contacts',
+  'conversation',
+  'session',
 ];
+
+export const enhancers = keys.map(k => persist(k));
 
 export const middleware = [];
 
