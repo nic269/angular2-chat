@@ -42,18 +42,26 @@ export class RioSearchableList {
 
   private filteredList: ConcreteContact[] = [];
 
-  private search = new Control(null);
+  private search: string;
 
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
-  private ngOnChanges() {
+  private filter() {
     const existingContacts = this.ngRedux.getState()
       .contacts.get('people').toJS();
 
     this.filteredList = this.pipe.transform(
       this.list,
       existingContacts,
-      this.search.value);
+      this.search || '');
+  }
+
+  private ngOnChanges() {
+    this.filter();
+  }
+
+  private onSearchChanged() {
+    this.filter();
   }
 
   private onToggleSelect(contact) {
