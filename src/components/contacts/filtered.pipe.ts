@@ -13,7 +13,7 @@ export class FilteredPipe implements PipeTransform {
     contacts: ConcreteContact[],
     existingContacts: ConcreteContact[],
     search: string)
-  {
+
     if (contacts == null || contacts.length === 0) {
       return contacts;
     }

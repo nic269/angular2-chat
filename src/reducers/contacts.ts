@@ -21,7 +21,7 @@ const updateAvailableContact =
     const people: List<Contact> = state.get('availablePeople');
 
     return state.set('availablePeople',
-      people.update(index, v => v.set(key,value)));
+      people.update(index, v => v.set(key, value)));
   };
 
 const updateAllAvailableContacts =
