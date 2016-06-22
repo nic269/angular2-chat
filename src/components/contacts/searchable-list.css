@@ -13,3 +13,13 @@
   padding: 6px;
 }
 
+:host input[type='checkbox'] {
+  display: inline-block;
+}
+
+:host input[type='text'] {
+  font-size: 1em;
+  margin: 5px;
+  padding: 10px;
+  width: calc(100% - 10px);
+}
