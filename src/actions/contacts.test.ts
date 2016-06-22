@@ -21,7 +21,7 @@ describe('contacts action creators', () => {
 
   beforeEach(() => {
     mockRedux = new MockRedux();
-    actions = new ContactsActions(mockRedux);
+    actions = new ContactsActions(mockRedux, null);
   });
 
   // it('decrement should dispatch DECREMENT_COUNTER action', () => {

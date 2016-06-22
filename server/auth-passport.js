@@ -11,7 +11,7 @@ function generateToken(users) {
 
 module.exports = {
   authenticateUser: (name, username, password, users) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       if (users.hasOwnProperty(username)) {
         resolve(users[username]);
       }
