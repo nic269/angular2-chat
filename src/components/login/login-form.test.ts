@@ -79,7 +79,7 @@ describe('Component: Login Form', () => {
           let alert = fixture.nativeElement.
             querySelector('#qa-uname-validation');
           expect(alert).not.toBeNull();
-          expect(alert.innerText).toEqual('Username is required.');
+          expect(alert.innerText).toEqual('Please enter a valid email address');
         });
       })
   ));
@@ -94,7 +94,7 @@ describe('Component: Login Form', () => {
           let alert = fixture.nativeElement.
             querySelector('#qa-password-validation');
           expect(alert).not.toBeNull();
-          expect(alert.innerText).toEqual('Password is required.');
+          expect(alert.innerText).toEqual('Password is required');
         });
       })
   ));
@@ -127,15 +127,15 @@ describe('Component: Login Form', () => {
           expect(fixture.componentInstance.username._value).toEqual('user');
           expect(fixture.componentInstance.password._value).toEqual('pass');
 
-          spyOn(fixture.componentInstance, 'reset').and.callThrough();
+          spyOn(fixture.componentInstance, 'onReset').and.callThrough();
           let button = fixture.nativeElement.querySelector('#qa-clear-button');
           button.click();
 
           fixture.whenStable().then(() => {
              fixture.detectChanges();
-             expect(fixture.componentInstance.reset).toHaveBeenCalled();
-             expect(fixture.componentInstance.username._value).toEqual('');
-             expect(fixture.componentInstance.password._value).toEqual('');
+             expect(fixture.componentInstance.onReset).toHaveBeenCalled();
+             expect(fixture.componentInstance.username._value).toBeNull();
+             expect(fixture.componentInstance.password._value).toBeNull();
           });
         });
     }))

@@ -36,7 +36,9 @@ const updateAllAvailableContacts =
       }));
   };
 
-export function contactsReducer(state: Contacts = INITIAL_STATE, action) {
+const def = {type: '', payload: null};
+
+const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
   switch (action.type) {
   case ContactsActions.SELECT_CONTACT:
     const {index: sindex} = action.payload;
@@ -86,3 +88,5 @@ export function contactsReducer(state: Contacts = INITIAL_STATE, action) {
     return state;
   }
 };
+
+export { contactsReducer };

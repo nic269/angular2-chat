@@ -16,6 +16,7 @@ import {
   ResponseType
 } from '@angular/http';
 
+import { ServerService } from '../server';
 import { AuthService } from './index';
 
 describe('authenticator-service', () => {
@@ -23,6 +24,7 @@ describe('authenticator-service', () => {
     fakeAsync(inject([], () => {
       const injector = ReflectiveInjector.resolveAndCreate([
         AuthService,
+        ServerService,
         MockBackend,
         BaseRequestOptions,
         provide(Http, {
