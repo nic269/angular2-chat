@@ -60,11 +60,20 @@ export class ContactsActions {
   add() {
     const state = this.ngRedux.getState();
 
+    const existing = state.contacts.get('people').toJS();
+
     const selected = state.contacts.get('availablePeople')
-      .filter(p => p.get('selected'));
+      .filter(
+        p => p.get('selected') &&
+        existing.find(c => c.username === p.username) == null);
+
+    if (selected.count() === 0) {
+      return;
+    }
 
     this.ngRedux.dispatch({
       type: ContactsActions.ADD_CONTACT_PENDING,
+      payload: selected,
     });
 
     const body = selected.toJS();
@@ -79,7 +88,6 @@ export class ContactsActions {
     return promise.then(
       () => this.ngRedux.dispatch({
         type: ContactsActions.ADD_CONTACT_COMPLETE,
-        payload: selected
       }),
       err => this.ngRedux.dispatch({
         type: ContactsActions.ADD_CONTACT_ERROR,
