@@ -32,7 +32,18 @@ export class RioUserPresence {
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
   ngOnInit() {
-    this.state = this.ngRedux.getState().contacts.get('presence');
+    const p = presence => {
+      switch (typeof presence) {
+      default:
+        return Presence.Online;
+      case 'number':
+        return presence;
+      case 'string':
+        return Presence[presence];
+      }
+    };
+
+    this.state = p(this.ngRedux.getState().contacts.get('presence'));
   }
 
   private onStateChanged(state: Presence) {

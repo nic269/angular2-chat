@@ -1,0 +1,11 @@
+<div>
+  <rio-modal *ngIf="conversation$ | async">
+    <rio-modal-content>
+      <rio-conversation
+        [participant]="participant$ | async"
+        (sendMessage)="onSendMessage($event)"
+        (close)="onClose()">
+      </rio-conversation>
+    </rio-modal-content>
+  </rio-modal>
+</div>
