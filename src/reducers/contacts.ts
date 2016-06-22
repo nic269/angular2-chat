@@ -48,21 +48,21 @@ export function contactsReducer(state: Contacts = INITIAL_STATE, action) {
     return state.mergeIn(['add'],
       { modal: true, state: AddContactState.Idle, failure: null });
   case ContactsActions.ADD_CONTACT_PENDING:
-    return state.mergeIn(['add'], {
-      state: AddContactState.Adding,
-      failure: null,
-    });
+    return updateAllAvailableContacts(
+             state.mergeIn(['add'], {
+               state: AddContactState.Adding,
+               failure: null,
+             })
+             .updateIn(['people'],  List(), l => l.concat(action.payload)),
+          'selected', false);
   case ContactsActions.ADD_CONTACT_CANCEL:
     return state.mergeIn(['add'], {
       modal: false,
       state: AddContactState.Idle,
     });
   case ContactsActions.ADD_CONTACT_COMPLETE:
-    return updateAllAvailableContacts(
-             state
-                .mergeIn(['add'], { modal: false, state: AddContactState.Idle })
-                .updateIn(['people'],  List(), l => l.concat(action.payload)),
-            'selected', false);
+    return state.mergeIn(['add'],
+      { modal: false, state: AddContactState.Idle });
   case ContactsActions.ADD_CONTACT_ERROR:
     return state.mergeIn(['add'], {
       failure: action.payload,
