@@ -10,10 +10,9 @@ import {
 @Pipe({ name: 'filtered' })
 export class FilteredPipe implements PipeTransform {
   transform(
-    contacts: ConcreteContact[],
-    existingContacts: ConcreteContact[],
-    search: string)
-
+      contacts: ConcreteContact[],
+      existingContacts: ConcreteContact[],
+      search: string) {
     if (contacts == null || contacts.length === 0) {
       return contacts;
     }
