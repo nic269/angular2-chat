@@ -26,9 +26,7 @@ import {
 import { RioAlert } from '../alert';
 import { RioButton } from '../button';
 import { RioInput } from '../form/input';
-import {
-  RioSearchableList,
-} from './searchable-list';
+import { RioSearchableList } from './searchable-list';
 import { SelectEvent } from '../../actions/contacts';
 import {
   AddContactState,

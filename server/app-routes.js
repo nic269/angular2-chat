@@ -1,18 +1,53 @@
 'use strict';
 
 module.exports = function(app, users) {
-  app.post('/api/contacts/add', (req, response) => {
+  const getUser = request => {
+    const token = request.headers['authentication-token'];
+    if (token == null || token.length === 0) {
+      return null;
+    }
+
+    const matchingUser = Object.keys(users)
+      .map(k => users[k])
+      .find(u => u.token === token);
+    if (matchingUser == null) {
+      return null;
+    }
+
+    return matchingUser.username;
+  };
+
+  const bu = fn => {
+    return function (req, response) {
+      const user = getUser(req);
+      if (user == null) {
+        response.sendStatus(401);
+      }
+      else {
+        return fn(user, req, response);
+      }
+    };
+  };
+
+  app.post('/api/contacts/add', bu((user, req, response) => {
     const contacts = req.body;
 
-    contacts.forEach(c => console.log('adding', c));
+    users[user].contacts = (users[user].contacts || []).concat(contacts);
 
-    response.send(true);
-  });
+    response.send({});
+  }));
 
-  app.get('/api/contacts/list', (req, response) => {
+  app.get('/api/contacts/list', bu((user, req, response) => {
     const list = Object.keys(users).map( // remove security token
       key => Object.assign({}, users[key], { token: undefined }));
 
     response.send(list);
-  });
+  }));
+
+  app.get('/api/contacts/change-presence/:presence',
+    bu((user, req, response) => {
+      users[user].presence = req.params.presence;
+
+      response.send({});
+    }));
 };

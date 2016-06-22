@@ -3,6 +3,7 @@ import { List, Map, fromJS } from 'immutable';
 import { AddContactState, Contact } from '../contacts';
 import { ContactsActions } from '../actions/contacts';
 import { SessionActions } from '../actions/session';
+import { Presence } from '../contacts';
 
 const INITIAL_STATE = fromJS({
   add: {
@@ -10,8 +11,15 @@ const INITIAL_STATE = fromJS({
     state: AddContactState.Idle,
     failure: null
   },
-  people: [], // people added to your contacts,
-  availablePeople: [] // the universe of available people
+
+  // people added to your contacts,
+  people: [],
+
+  // the universe of available people
+  availablePeople: [],
+
+  // our presence
+  presence: Presence.Online,
 });
 
 export type Contacts = Map<string, any>;
@@ -40,6 +48,8 @@ const def = {type: '', payload: null};
 
 const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
   switch (action.type) {
+  case ContactsActions.CHANGE_PRESENCE:
+    return state.set('presence', state);
   case ContactsActions.SELECT_CONTACT:
     const {index: sindex} = action.payload;
     return updateAvailableContact(state, sindex, 'selected', true);
@@ -82,6 +92,15 @@ const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
     return state
             .setIn(['availablePeople'], fromJS(action.payload))
             .mergeIn(['add'], { state: AddContactState.Idle });
+  case SessionActions.LOGIN_USER_SUCCESS:
+    const {contacts, presence} = action.payload;
+
+    return state.mergeDeep(fromJS({
+      people: contacts || [],
+      presence: presence == null
+        ? Presence.Online
+        : Presence[presence]
+    }));
   case SessionActions.LOGOUT_USER:
     return state.merge(INITIAL_STATE);
   default:

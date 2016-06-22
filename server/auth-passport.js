@@ -15,14 +15,25 @@ module.exports = {
       if (users.hasOwnProperty(username)) {
         resolve(users[username]);
       }
-
-      const token = generateToken(users);
-
-      const result = { id: username, name, username, token };
-
-      users[username] = result;
-
-      resolve(result);
+      else {
+        const token = generateToken(users);
+  
+        // NOTE(cbond): If the user has just logged in, they must be online
+        const presence = 'Online';
+  
+        const result = {
+          id: username,
+          name,
+          presence,
+          username,
+          token,
+          contacts: [],
+        };
+  
+        users[username] = result;
+  
+        resolve(result);
+      }
     });
   },
 

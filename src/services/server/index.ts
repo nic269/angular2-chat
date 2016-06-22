@@ -1,36 +1,88 @@
-import { Injectable, provide } from '@angular/core';
-import {Http, Request, Response, Headers} from '@angular/http';
+import {
+  Injectable,
+  provide
+} from '@angular/core';
+
+import {
+  Http,
+  Request,
+  Response,
+  Headers
+} from '@angular/http';
+
+import { NgRedux } from 'ng2-redux';
+
 import 'rxjs/add/operator/map';
+
+import { IAppState } from '../../reducers';
+
 export { RealTime } from './real-time';
 
-const HEADERS = new Headers({ 'Content-Type': 'application/json' });
+const url = path => `/api${path}`;
 
 @Injectable()
 export class ServerService {
-
-  private BASE_URL = '/api';
-
   constructor(
-    private _http: Http
-  ) {}
+    private ngRedux: NgRedux<IAppState>,
+    private http: Http) {}
 
-  public post(path, data) {
-    return this._http.post(this.BASE_URL + path, JSON.stringify(data),
-      { headers: HEADERS})
-     .map((res: Response) => res.json());
+  post<T>(path: string, data: T) {
+    return this.http.post(url(path), JSON.stringify(data), this.options)
+      .map(response => response.json());
   }
 
-  public get(path) {
-    return this._http.get(this.BASE_URL + path)
-    .map((res: Response) => res.json());
+  postSingle<TResult>(path, data) {
+    return new Promise<TResult>((resolve, reject) => {
+      const subject = this.post(path, data);
+
+      subject.subscribe(result => resolve(result), err => reject(err));
+    });
   }
 
-  public put(path, id, data) {
-    return this._http.put(this.BASE_URL + path + '/' + id, data)
-    .map((res: Response) => res.json());
+  get(path: string) {
+    return this.http.get(url(path), this.options)
+      .map(response => response.json());
   }
 
-  public delete(path, id) {
-    return this._http.delete(this.BASE_URL + path + '/' + id);
+  getSingle<TResult>(path) {
+    return new Promise<TResult>((resolve, reject) => {
+      this.get(path).subscribe(result => resolve(result), err => reject(err));
+    });
+  }
+
+  put(path, id, data) {
+    return this.http.put(url(`${path}/${id}`), data, this.options)
+      .map(res => res.json());
+  }
+
+  putSingle<TResult>(path, id, data) {
+    return new Promise<TResult>((resolve, reject) => {
+      const request = this.put(path, id, data);
+
+      request.subscribe(result => resolve(result), err => reject(err));
+    });
+  }
+
+  delete(path, id) {
+    return this.http.delete(url(`${path}/${id}`), this.options);
+  }
+
+  deleteSingle<TResult>(path, id) {
+    return new Promise((resolve, reject) => {
+      const request = this.delete(path, id);
+
+      request.subscribe(result => resolve(result), err => reject(err));
+    });
+  }
+
+  private get options() {
+    const state = this.ngRedux.getState();
+
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'Authentication-Token': state.session.get('token')
+    });
+
+    return { headers };
   }
 }

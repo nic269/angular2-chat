@@ -33,7 +33,8 @@ import {
         (cancel)="actions.cancel()"
         (request)="actions.add()"
         (select)="actions.select($event)"
-        (unselect)="actions.unselect($event)">
+        (unselect)="actions.unselect($event)"
+        (changePresence)="actions.changePresence($event)">
       </rio-contacts>
     </rio-container>
   `

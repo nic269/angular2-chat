@@ -17,6 +17,7 @@ export enum AddContactState {
 export interface ConcreteContact {
   name: string;
   username: string;
+  presence: Presence | string;
   lastSeen: Date;
 };
 
