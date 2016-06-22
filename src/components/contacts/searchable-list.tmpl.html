@@ -1,0 +1,17 @@
+<div>
+  <rio-input placeholder="Search name or email" [formControl]="search">
+  </rio-input>
+  <div *ngIf="filteredList.length === 0">
+    <h3>No matching contacts have been found</h3>
+  </div>
+  <ul *ngIf="filteredList.length > 0">
+    <li *ngFor="let contact of filteredList">
+      <input
+        class="toggle"
+        type="checkbox"
+        (click)="onToggleSelect(contact)"
+        [checked]="contact.selected" />
+      <span>{{contact.username}}</span>
+    </li>
+  </ul>
+</div>
