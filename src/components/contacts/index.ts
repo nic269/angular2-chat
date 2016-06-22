@@ -35,10 +35,15 @@ import { Contacts } from '../../reducers/contacts';
             [ngClass]="{
               'idle': contact.presence === presence.Idle,
               'online': contact.presence === presence.Online,
-              'offline': contact.presence === presence.Offline
+              'offline': contact.presence == null ||
+                         contact.presence === presence.Offline
             }">
           </div>
           {{contact.username}}
+          <li class="actions">
+            <button>Chat</button>
+            <button>Remove</button>
+          </li>
         </li>
       </ul>
 

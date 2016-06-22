@@ -1,4 +1,6 @@
-module.exports = function (app, users) {
+'use strict';
+
+module.exports = function(app, users) {
   app.post('/api/contacts/add', (req, response) => {
     const contacts = req.body;
 
@@ -9,7 +11,7 @@ module.exports = function (app, users) {
 
   app.get('/api/contacts/list', (req, response) => {
     const list = Object.keys(users).map( // remove security token
-      key => Object.assign({}, users[key], {token: undefined}));
+      key => Object.assign({}, users[key], { token: undefined }));
 
     response.send(list);
   });
