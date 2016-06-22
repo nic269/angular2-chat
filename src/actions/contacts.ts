@@ -5,7 +5,8 @@ import { ServerService } from '../services/server';
 
 import {
   Contact,
-  ConcreteContact
+  ConcreteContact,
+  Presence,
 } from '../contacts';
 
 export interface SelectEvent {
@@ -25,6 +26,7 @@ export class ContactsActions {
   static ADD_CONTACT_COMPLETE = 'ADD_CONTACT_COMPLETE';
   static ADD_CONTACT_PENDING = 'ADD_CONTACT_PENDING';
   static ADD_CONTACT_ERROR = 'ADD_CONTACT_ERROR';
+  static CHANGE_PRESENCE = 'CHANGE_PRESENCE';
   static REQUEST_AVAILABLE_CONTACTS = 'REQUEST_AVAILABLE_CONTACTS';
   static LIST_AVAILABLE_CONTACTS = 'LIST_AVAILABLE_CONTACTS';
   static LIST_AVAILABLE_CONTACTS_FAILED = 'LIST_AVAILABLE_CONTACTS_FAILED';
@@ -78,12 +80,7 @@ export class ContactsActions {
 
     const body = selected.toJS();
 
-    const promise = new Promise((resolve, reject) => {
-      this.service.post('/contacts/add', body)
-        .subscribe(
-          next => resolve(selected),
-          err => reject(err.message || 'Failed to add contact'));
-    });
+    const promise = this.service.postSingle<void>('/contacts/add', body);
 
     return promise.then(
       () => this.ngRedux.dispatch({
@@ -91,25 +88,38 @@ export class ContactsActions {
       }),
       err => this.ngRedux.dispatch({
         type: ContactsActions.ADD_CONTACT_ERROR,
-        payload: err
+        payload: err.message || 'Failure to add contact'
       }));
   }
 
   list() {
     this.ngRedux.dispatch({ type: ContactsActions.REQUEST_AVAILABLE_CONTACTS });
 
-    const promise = new Promise((resolve, reject) => {
-      this.service.get('/contacts/list')
-        .subscribe(next => resolve(next), err => reject(err));
-    });
+    const promise = this.service.getSingle<ConcreteContact[]>('/contacts/list');
+
+    const transform = (c: ConcreteContact) => {
+      return Object.assign({}, c, { presence: Presence[c.presence] });
+    };
 
     return promise.then(
       contacts => this.ngRedux.dispatch({
         type: ContactsActions.LIST_AVAILABLE_CONTACTS,
-        payload: contacts
+        payload: contacts.map(c => transform(c)),
       }),
       err => this.ngRedux.dispatch({
-        type: ContactsActions.LIST_AVAILABLE_CONTACTS_FAILED
+        type: ContactsActions.LIST_AVAILABLE_CONTACTS_FAILED,
       }));
+  }
+
+  changePresence(state: Presence) {
+    const promise = this.service
+      .getSingle<void>(`/contacts/change-presence/${Presence[state]}`);
+
+    promise.then(() => {});
+
+    this.ngRedux.dispatch({
+      type: ContactsActions.CHANGE_PRESENCE,
+      payload: state,
+    });
   }
 }

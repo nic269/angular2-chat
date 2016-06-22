@@ -13,6 +13,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { IAppState } from '../../reducers';
 import { RioAddContactForm } from './add-contact-form';
+import { RioUserPresence } from './user-presence';
 import { RioButton } from '../button';
 import {
   RioModal,
@@ -29,21 +30,27 @@ import { Contacts } from '../../reducers/contacts';
   selector: 'rio-contacts',
   template: `
     <div>
+      <rio-user-presence
+        [state]="state"
+        (stateChange)="onStateChanged($event)">
+      </rio-user-presence>
       <ul>
-        <li *ngFor="let contact of (people$ | async)">
+        <li *ngFor="let contact of (people$ | async)" class="status">
           <div class="presence"
             [ngClass]="{
               'idle': contact.presence === presence.Idle,
               'online': contact.presence === presence.Online,
-              'offline': contact.presence == null ||
-                         contact.presence === presence.Offline
-            }">
+              'offline': contact.presence === presence.Offline}">
           </div>
-          {{contact.username}}
-          <li class="actions">
-            <button>Chat</button>
-            <button>Remove</button>
-          </li>
+          <span class="username">{{contact.username}}</span>
+          <ul class="actions">
+            <li>
+              <button>Chat</button>
+            </li>
+            <li>
+              <button>Remove</button>
+            </li>
+          </ul>
         </li>
       </ul>
 
@@ -69,9 +76,11 @@ import { Contacts } from '../../reducers/contacts';
     RioButton,
     RioModal,
     RioModalContent,
-    RioAddContactForm
+    RioAddContactForm,
+    RioUserPresence,
   ],
   pipes: [AsyncPipe],
+  styles: [require('./index.css')],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RioContacts {
@@ -82,6 +91,7 @@ export class RioContacts {
   @Output() request = new EventEmitter<Contact>();
   @Output() select = new EventEmitter<Contact>();
   @Output() unselect = new EventEmitter<Contact>();
+  @Output() changePresence = new EventEmitter<Presence>();
 
   private presence = Presence;
 
@@ -123,5 +133,9 @@ export class RioContacts {
 
   private onUnselect = (contact: Contact) => {
     this.unselect.emit(contact);
+  }
+
+  private onStateChanged = (state: Presence) => {
+    this.changePresence.emit(state);
   }
 };
