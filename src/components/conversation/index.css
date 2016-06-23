@@ -1,0 +1,16 @@
+:host .content {
+  min-height: 550px;
+  position: relative;
+}
+
+:host .messages {
+  display: block;
+  width: 100%;
+  min-height: 525px;
+}
+
+:host input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+}

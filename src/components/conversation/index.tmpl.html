@@ -7,7 +7,28 @@
         (click)="onClose()">
         Close
       </rio-button>
-      Conversation
+      <div class="content">
+        {{(participant$ | async).username}}
+        <div class="messages">
+          <ul>
+            <li *ngFor="let msg of messages">
+              <div className="from">
+                <span *ngIf="msg.source == messageSource.Local">
+                  me
+                </span>
+                <span *ngIf="msg.source == messageSource.Remote">
+                  {{(participant$ | async).username}}
+                </span>
+              </div>
+              <div className="text">{{msg.text}}</div>
+            </li>
+          </ul>
+        </div>
+        <input
+          placeholder="Type a message"
+          type="text"
+          (keyup.enter)="onSend($event)" />
+      </div>
     </rio-modal-content>
   </rio-modal>
 </div>
