@@ -48,11 +48,17 @@ import {
         (openChat)="conversationActions.open($event)">
       </rio-contacts>
 
-      <rio-conversation></rio-conversation>
+      <div *ngIf="participant$ | async">
+        <rio-conversation [participant]="participant$ | async">
+        </rio-conversation>
+      </div>
     </rio-container>
   `
 })
 export class RioContactsPage {
+  @select(s => s.conversation.get('participant'))
+    private participant$: Observable<Contact>;
+
   constructor(
     private actions: ContactsActions,
     private conversationActions: ConversationActions) {}

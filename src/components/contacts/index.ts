@@ -11,15 +11,15 @@ import { Map } from 'immutable';
 import { Observable } from 'rxjs/Observable';
 
 import { IAppState } from '../../reducers';
+import { RioButton } from '../button';
 import {
-  RioAddContactForm,
-  RioUserPresence,
-  RioButton,
-  RioConversation,
   RioModal,
   RioModalContent,
-  RioRemoveContactConfirm,
- } from '../index';
+} from '../modal/index';
+
+import { RioAddContactForm } from './add-contact-form';
+import { RioUserPresence } from './user-presence';
+import { RioRemoveContactConfirm } from './remove-contact-confirm';
 
 import {
   Contact,

@@ -5,27 +5,26 @@ import {
 
 import { select } from 'ng2-redux';
 
+import { List } from 'immutable';
+
 import { Observable } from 'rxjs';
 
-import { ConcreteContact } from '../../contacts';
+import {
+  Contact,
+  ConcreteContact
+} from '../../contacts';
 import { Conversation } from '../../reducers/conversation';
-import { ConversationActions } from '../../actions/conversation';
+import {
+  ConversationActions,
+  MessageSource,
+  Message,
+} from '../../actions/conversation';
 
 import { RioButton } from '../button';
 import {
   RioModal,
   RioModalContent
 } from '../modal';
-
-export enum MessageSource {
-  Local,
-  Remote
-}
-
-export interface Message {
-  source: MessageSource;
-  text: string;
-};
 
 @Component({
   selector: 'rio-conversation',
@@ -40,38 +39,35 @@ export interface Message {
 export class RioConversation {
   @select() private conversation$: Observable<Conversation>;
 
-  private participant$: Observable<ConcreteContact>;
-
-  private messages: Message[] = [];
+  @Input() participant: Contact;
 
   private messageSource = MessageSource;
 
-  constructor(private actions: ConversationActions) {
-    this.participant$ = this.conversation$.map(c => c.get('participant'));
-  }
+  constructor(private actions: ConversationActions) {}
 
-  private addLocalMessage(text) {
-    this.messages.push({
-      source: MessageSource.Local,
-      text
-    });
-  }
+  private getMessages() {
+    if (this.participant == null) {
+      return [];
+    }
 
-  private addRemoteMessage(text) {
-    this.messages.push({
-      source: MessageSource.Remote,
-      text
-    });
+    const messages: List<Message> = this.participant.get('messages');
+    if (messages == null) {
+      return [];
+    }
+
+    return messages.toJS();
   }
 
   private onClose() {
     this.actions.close();
   }
 
-  private onSend(event) {
-    this.addLocalMessage(event.currentTarget.value);
+  private onSend(event, contact) {
+    const message = event.currentTarget.value;
 
     event.currentTarget.value = '';
+
+    this.actions.send(contact, message);
   }
 };
 

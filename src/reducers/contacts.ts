@@ -4,6 +4,10 @@ import { AddContactState, Contact } from '../contacts';
 import { ContactsActions } from '../actions/contacts';
 import { SessionActions } from '../actions/session';
 import { Presence } from '../contacts';
+import {
+  ConversationActions,
+  MessageSource,
+} from '../actions/conversation';
 
 const INITIAL_STATE = fromJS({
   add: {
@@ -43,6 +47,19 @@ const updateAllAvailableContacts =
         }
       }));
   };
+
+const addMessage = (state: Contacts, username: string,
+    source: MessageSource, message: string) => {
+  const people: List<Contact> = state.get('people');
+
+  const m = { source, message };
+
+  return state.set('people',
+    people.withMutations(p => {
+      const index = p.findIndex(c => c.get('username') === username);
+      p.update(index, v => v.mergeDeep(fromJS({ messages: [m] })));
+    }));
+};
 
 const def = {type: '', payload: null};
 
@@ -102,6 +119,13 @@ const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
     return state
             .setIn(['availablePeople'], fromJS(action.payload))
             .mergeIn(['add'], { state: AddContactState.Idle });
+
+  case ConversationActions.SEND_MESSAGE:
+    const {source, message, contact} = action.payload;
+
+    const username = contact.get('username');
+
+    return addMessage(state, username, source, message);
 
   case SessionActions.LOGIN_USER_SUCCESS:
     const {contacts, presence} = action.payload;
