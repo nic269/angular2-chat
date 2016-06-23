@@ -22,7 +22,7 @@ export class RealTime {
   }
 
   sendMessage(username: string, text: string) {
-    const from = this.ngRedux.getState().session.get('user').get('username'); 
+    const from = this.ngRedux.getState().session.get('user').get('username');
     this.socket.emit('message', {
       from,
       username,
@@ -35,6 +35,6 @@ export class RealTime {
 
     return () => {
       this.socket.removeListener('message', callback);
-    }
+    };
   }
 }
