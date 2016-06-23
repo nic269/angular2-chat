@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app, users) {
+module.exports = function routes(app, users) {
   const getUser = request => {
     const token = request.headers['authentication-token'];
     if (!token) {
@@ -18,7 +18,7 @@ module.exports = function(app, users) {
   };
 
   const bu = fn => {
-    return function(req, response) {
+    return function bindUser(req, response) {
       const user = getUser(req);
       if (!user) {
         response.sendStatus(401);

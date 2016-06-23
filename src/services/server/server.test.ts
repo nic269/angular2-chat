@@ -1,4 +1,13 @@
 import {
+  it,
+  xit,
+  describe,
+  expect,
+  inject,
+  fakeAsync,
+  beforeEachProviders,
+} from '@angular/core/testing';
+import {
   BaseRequestOptions,
   Response,
   ResponseOptions,
@@ -6,23 +15,29 @@ import {
   Http,
   RequestMethod
 } from '@angular/http';
-
+import {
+  Injectable,
+  provide,
+} from '@angular/core';
 import {
   MockBackend
 } from '@angular/http/testing';
 
-import {
-  it,
-  xit,
-  describe,
-  expect,
-  inject,
-  fakeAsync,
-  beforeEachProviders
-} from '@angular/core/testing';
+import { NgRedux } from 'ng2-redux';
 
-import {provide} from '@angular/core';
-import {ServerService} from './index';
+import { ServerService } from './index';
+
+@Injectable()
+class MockRedux extends NgRedux<any> {
+  private state = {};
+
+  constructor() {
+    super(null);
+  }
+
+  dispatch = () => undefined;
+  getState = () => ({});
+};
 
 describe('Testing server service', () => {
   const _mockPath = '/path';
@@ -40,16 +55,15 @@ describe('Testing server service', () => {
     return [
       MockBackend,
       BaseRequestOptions,
-      provide(
-        Http, {
-          useFactory: (
-            mockBackend: ConnectionBackend, defaultOptions: BaseRequestOptions
-          ) => {
-            return new Http(mockBackend, defaultOptions);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        }
-      ),
+      provide(Http, {
+        useFactory: (
+            mockBackend: ConnectionBackend,
+            defaultOptions: BaseRequestOptions) => {
+          return new Http(mockBackend, defaultOptions);
+        },
+        deps: [MockBackend, BaseRequestOptions]
+      }),
+      provide(NgRedux, { useFactory: () => new MockRedux() }),
       ServerService,
     ];
   });
