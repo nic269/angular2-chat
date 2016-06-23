@@ -1,4 +1,8 @@
-import { provide, ReflectiveInjector } from '@angular/core';
+import {
+  provide,
+  Injectable,
+  ReflectiveInjector,
+} from '@angular/core';
 import { MockBackend } from '@angular/http/testing';
 import {
   fakeAsync,
@@ -16,13 +20,28 @@ import {
   ResponseType
 } from '@angular/http';
 
+import { NgRedux } from 'ng2-redux';
+
 import { ServerService } from '../server';
 import { AuthService } from './index';
+
+@Injectable()
+class MockRedux extends NgRedux<any> {
+  private state = {};
+
+  constructor() {
+    super(null);
+  }
+
+  dispatch = () => undefined;
+  getState = () => ({});
+};
 
 describe('authenticator-service', () => {
   it('should accept a valid email address',
     fakeAsync(inject([], () => {
       const injector = ReflectiveInjector.resolveAndCreate([
+        NgRedux,
         AuthService,
         ServerService,
         MockBackend,
@@ -32,7 +51,8 @@ describe('authenticator-service', () => {
             return new Http(backend, options);
           },
           deps: [MockBackend, BaseRequestOptions]
-        })
+        }),
+        provide(NgRedux, { useFactory: () => new MockRedux() }),
       ]);
 
       const http = injector.get(Http);

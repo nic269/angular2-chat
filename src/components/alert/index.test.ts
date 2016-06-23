@@ -17,6 +17,7 @@ describe('Component: Alert', () => {
   let builder: TestComponentBuilder;
 
   beforeEachProviders(() => [RioAlert]);
+
   beforeEach(inject([TestComponentBuilder],
     function (tcb: TestComponentBuilder) {
       builder = tcb;

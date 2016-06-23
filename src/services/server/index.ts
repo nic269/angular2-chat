@@ -78,9 +78,13 @@ export class ServerService {
   private get options() {
     const state = this.ngRedux.getState();
 
+    const token = state == null || state.session == null
+      ? null
+      : state.session.get('token');
+
     const headers = new Headers({
       'Content-Type': 'application/json',
-      'Authentication-Token': state.session.get('token')
+      'Authentication-Token': token
     });
 
     return { headers };

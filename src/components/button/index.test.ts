@@ -7,8 +7,10 @@ import {
   it,
   inject,
 } from '@angular/core/testing';
-import { ComponentFixture, TestComponentBuilder }
-from '@angular/compiler/testing';
+import {
+  ComponentFixture,
+  TestComponentBuilder,
+} from '@angular/compiler/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { RioButton } from './index';
@@ -17,6 +19,7 @@ describe('Component: Button', () => {
   let builder: TestComponentBuilder;
 
   beforeEachProviders(() => [RioButton]);
+
   beforeEach(inject([TestComponentBuilder],
     function (tcb: TestComponentBuilder) {
       builder = tcb;

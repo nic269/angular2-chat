@@ -8,19 +8,25 @@ import {
   inject,
   injectAsync,
 } from '@angular/core/testing';
-import { ComponentFixture, TestComponentBuilder }
-from '@angular/compiler/testing';
+import {
+  NgFormModel,
+  ControlGroup,
+  Control,
+  FormBuilder,
+} from '@angular/common';
+import {
+  ComponentFixture,
+  TestComponentBuilder,
+} from '@angular/compiler/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { RioFormGroup } from './form-group';
-import { NgFormModel, ControlGroup, Control, FormBuilder }
-from '@angular/common';
-
 
 describe('Component: Navigator', () => {
   let builder: TestComponentBuilder;
 
   beforeEachProviders(() => [RioFormGroup]);
+
   beforeEach(inject([TestComponentBuilder],
     function (tcb: TestComponentBuilder) {
       builder = tcb;

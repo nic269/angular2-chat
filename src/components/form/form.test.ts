@@ -8,13 +8,20 @@ import {
   inject,
   injectAsync,
 } from '@angular/core/testing';
-import { ComponentFixture, TestComponentBuilder }
-from '@angular/compiler/testing';
+import {
+  ComponentFixture,
+  TestComponentBuilder,
+} from '@angular/compiler/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+
 import { RioForm } from './form';
-import { NgFormModel, ControlGroup, Control, FormBuilder }
-from '@angular/common';
+import {
+  NgFormModel,
+  ControlGroup,
+  Control,
+  FormBuilder,
+} from '@angular/common';
 
 describe('Component: Form', () => {
   let builder: TestComponentBuilder;
@@ -52,7 +59,7 @@ describe('Component: Form', () => {
         query.componentInstance.submit.subscribe(c => {
           expect(c).toBeDefined();
         });
-        query.nativeElement.querySelector('button').click();
+        query.nativeElement.querySelector('input').click();
       });
   })));
 
@@ -63,10 +70,8 @@ describe('Component: Form', () => {
   template: `
     <rio-form
       [formModel]="group">
-      <input
-        [ngFormControl]="field1">
-       type="submit">submit</button>
-      </rio-form>
+      <input [ngFormControl]="field1"> type="submit" />
+    </rio-form>
   `,
   directives: [RioForm]
 })

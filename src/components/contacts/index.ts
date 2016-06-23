@@ -6,20 +6,21 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-
 import { select, NgRedux } from 'ng2-redux';
 import { Map } from 'immutable';
 import { Observable } from 'rxjs/Observable';
 
 import { IAppState } from '../../reducers';
-import { RioAddContactForm } from './add-contact-form';
-import { RioUserPresence } from './user-presence';
-import { RioButton } from '../button';
-import { RioConversation } from '../conversation';
 import {
+  RioAddContactForm,
+  RioUserPresence,
+  RioButton,
+  RioConversation,
   RioModal,
-  RioModalContent
-} from '../modal';
+  RioModalContent,
+  RioRemoveContactConfirm,
+ } from '../index';
+
 import {
   Contact,
   ConcreteContact,
@@ -71,6 +72,13 @@ import { Contacts } from '../../reducers/contacts';
           </rio-add-contact-form>
         </rio-modal-content>
       </rio-modal>
+
+      <rio-modal *ngIf="removingContact">
+        <rio-modal-content>
+          <remove-contact-confirm [contact]="removingContact">
+          </remove-contact-confirm>
+        </rio-modal-content>
+      </rio-modal>
     </div>
   `,
   directives: [
@@ -79,6 +87,7 @@ import { Contacts } from '../../reducers/contacts';
     RioModalContent,
     RioAddContactForm,
     RioUserPresence,
+    RioRemoveContactConfirm,
   ],
   pipes: [AsyncPipe],
   styles: [require('./index.css')],
@@ -104,6 +113,7 @@ export class RioContacts {
   private addState$: Observable<boolean>;
   private availablePeople$: Observable<ConcreteContact>;
   private existingContacts$: Observable<ConcreteContact>;
+  private removingContact: Contact;
 
   constructor() {
     this.people$ = this.contacts$.map(c => c.get('people').toJS());
@@ -147,6 +157,11 @@ export class RioContacts {
   }
 
   private onRemove = (contact: Contact) => {
+    this.removingContact = contact;
+  }
+
+  private onRemoveConfirm = (contact: Contact) => {
     this.removeContact.emit(contact);
+    this.removingContact = null;
   }
 };
