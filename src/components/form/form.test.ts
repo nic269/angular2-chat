@@ -65,7 +65,7 @@ describe('Component: Form', () => {
       [formModel]="group">
       <input
         [ngFormControl]="field1">
-      <button type="submit">submit</button>
+       type="submit">submit</button>
       </rio-form>
   `,
   directives: [RioForm]

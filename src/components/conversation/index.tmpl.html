@@ -1,11 +1,13 @@
 <div>
-  <rio-modal *ngIf="conversation$ | async">
+  <rio-modal *ngIf="participant$ | async">
     <rio-modal-content>
-      <rio-conversation
-        [participant]="participant$ | async"
-        (sendMessage)="onSendMessage($event)"
-        (close)="onClose()">
-      </rio-conversation>
+      <rio-button
+        qaid="qa-close-button"
+        className="mr1"
+        (click)="onClose()">
+        Close
+      </rio-button>
+      Conversation
     </rio-modal-content>
   </rio-modal>
 </div>

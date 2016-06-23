@@ -20,10 +20,7 @@ const persist = k => persistState(k, {
     if (parsed == null) {
       return null;
     }
-
-    return {
-      [k]: state ? fromJS(parsed) : fromJS({})
-    };
+    return { [k]: state ? fromJS(parsed) : fromJS({}) };
   }
 });
 
