@@ -57,10 +57,19 @@ const addMessage = (state: Contacts, username: string,
   return state.set('people',
     people.withMutations(p => {
       const index = p.findIndex(c => c.get('username') === username);
-      p.update(index, v =>
-        v.mergeDeep(fromJS({
-          messages: p.get(index).get('messages').concat([m])
-        })));
+      if (index < 0) { // automatically add to contacts
+        p.push(fromJS({
+          username,
+          messages: [m],
+          presence: Presence.Online,
+        }));
+      }
+      else {
+        p.update(index, v =>
+          v.mergeDeep(fromJS({
+            messages: p.get(index).get('messages').concat([m])
+          })));
+      }
     }));
 };
 
