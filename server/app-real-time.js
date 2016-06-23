@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (app, io, users) => {
+module.exports = (app, io) => {
   const onConnect = (socket) => {
     console.log('Client Connected');
     socket.on('message', (payload) => {
