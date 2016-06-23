@@ -12,15 +12,22 @@ import { IAppState } from '../../reducers';
 import { Contacts } from '../../reducers/contacts';
 import { Presence } from '../../contacts';
 
+import { RioPresenceIndicator } from './presence-indicator';
+
 @Component({
   selector: 'rio-user-presence',
   template: `
-    <select [(ngModel)]="state" (ngModelChange)="onStateChanged($event)">
-      <option [value]="presence.Online">Online</option>
-      <option [value]="presence.Offline">Offline</option>
-      <option [value]="presence.Idle">Idle</option>
-    </select>
-  `
+    <div>
+      <select [(ngModel)]="state" (ngModelChange)="onStateChanged($event)">
+        <option [value]="presence.Online">Online</option>
+        <option [value]="presence.Offline">Offline</option>
+        <option [value]="presence.Idle">Idle</option>
+      </select>
+      <rio-presence-indicator [presence]="state">
+      </rio-presence-indicator>
+    </div>
+  `,
+  directives: [ RioPresenceIndicator ]
 })
 export class RioUserPresence {
   @Output() private stateChange = new EventEmitter<Presence>();
