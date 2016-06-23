@@ -1,0 +1,31 @@
+:host .content {
+  min-height: 550px;
+  position: relative;
+}
+
+:host .messages {
+  display: block;
+  width: 100%;
+  min-height: 525px;
+}
+
+:host input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+}
+
+:host ul li {
+  list-style-type: none;
+}
+
+:host .from {
+  display: inline-block;
+  padding: 5px;
+  background-color: #eee;
+}
+
+:host .text {
+  display: inline-block;
+  padding: 5px;
+}

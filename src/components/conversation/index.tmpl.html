@@ -1,11 +1,34 @@
 <div>
-  <rio-modal *ngIf="conversation$ | async">
+  <rio-modal *ngIf="participant$ | async">
     <rio-modal-content>
-      <rio-conversation
-        [participant]="participant$ | async"
-        (sendMessage)="onSendMessage($event)"
-        (close)="onClose()">
-      </rio-conversation>
+      <rio-button
+        qaid="qa-close-button"
+        className="mr1"
+        (click)="onClose()">
+        Close
+      </rio-button>
+      <div class="content">
+        {{(participant$ | async).username}}
+        <div class="messages">
+          <ul>
+            <li *ngFor="let msg of messages">
+              <div class="from">
+                <span *ngIf="msg.source == messageSource.Local">
+                  me
+                </span>
+                <span *ngIf="msg.source == messageSource.Remote">
+                  {{(participant$ | async).username}}
+                </span>
+              </div>
+              <div class="text">{{msg.text}}</div>
+            </li>
+          </ul>
+        </div>
+        <input
+          placeholder="Type a message"
+          type="text"
+          (keyup.enter)="onSend($event)" />
+      </div>
     </rio-modal-content>
   </rio-modal>
 </div>

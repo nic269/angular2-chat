@@ -15,6 +15,7 @@ import { IAppState } from '../../reducers';
 import { RioAddContactForm } from './add-contact-form';
 import { RioUserPresence } from './user-presence';
 import { RioButton } from '../button';
+import { RioConversation } from '../conversation';
 import {
   RioModal,
   RioModalContent
@@ -45,10 +46,10 @@ import { Contacts } from '../../reducers/contacts';
           <span class="username">{{contact.username}}</span>
           <ul class="actions">
             <li>
-              <button>Chat</button>
+              <button (click)="onChat(contact)">Chat</button>
             </li>
             <li>
-              <button>Remove</button>
+              <button (click)="onRemove(contact)">Remove</button>
             </li>
           </ul>
         </li>
@@ -92,6 +93,8 @@ export class RioContacts {
   @Output() select = new EventEmitter<Contact>();
   @Output() unselect = new EventEmitter<Contact>();
   @Output() changePresence = new EventEmitter<Presence>();
+  @Output() openChat = new EventEmitter<Contact>();
+  @Output() removeContact = new EventEmitter<Contact>();
 
   private presence = Presence;
 
@@ -137,5 +140,13 @@ export class RioContacts {
 
   private onStateChanged = (state: Presence) => {
     this.changePresence.emit(state);
+  }
+
+  private onChat = (contact: Contact) => {
+    this.openChat.emit(contact);
+  }
+
+  private onRemove = (contact: Contact) => {
+    this.removeContact.emit(contact);
   }
 };

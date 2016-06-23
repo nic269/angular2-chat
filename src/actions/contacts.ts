@@ -111,6 +111,10 @@ export class ContactsActions {
       }));
   }
 
+  removeContact(contact: Contact) {
+    debugger;
+  }
+
   changePresence(state: Presence) {
     const promise = this.service
       .getSingle<void>(`/contacts/change-presence/${Presence[state]}`);

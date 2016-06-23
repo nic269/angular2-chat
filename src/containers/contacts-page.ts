@@ -11,17 +11,26 @@ import { bindActionCreators } from 'redux';
 import { select } from 'ng2-redux';
 
 import { ContactsActions } from '../actions/contacts';
+import { ConversationActions } from '../actions/conversation';
 import { Contact } from '../contacts';
 import { Contacts } from '../reducers/contacts';
 import {
   RioContainer,
-  RioContacts
+  RioContacts,
+  RioConversation,
 } from '../components';
 
 @Component({
   selector: 'contacts-page',
-  providers: [ ContactsActions ],
-  directives: [ RioContainer, RioContacts ],
+  providers: [
+    ContactsActions,
+    ConversationActions,
+  ],
+  directives: [
+    RioContainer,
+    RioContacts,
+    RioConversation,
+  ],
   pipes: [ AsyncPipe ],
   template: `
     <rio-container [size]=2 [center]=true>
@@ -34,11 +43,17 @@ import {
         (request)="actions.add()"
         (select)="actions.select($event)"
         (unselect)="actions.unselect($event)"
-        (changePresence)="actions.changePresence($event)">
+        (changePresence)="actions.changePresence($event)"
+        (removeContact)="actions.removeContact($event)"
+        (openChat)="conversationActions.open($event)">
       </rio-contacts>
+
+      <rio-conversation></rio-conversation>
     </rio-container>
   `
 })
 export class RioContactsPage {
-  constructor(private actions: ContactsActions) {}
+  constructor(
+    private actions: ContactsActions,
+    private conversationActions: ConversationActions) {}
 }
