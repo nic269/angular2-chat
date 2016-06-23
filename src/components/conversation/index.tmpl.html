@@ -7,8 +7,10 @@
         (click)="onClose()">
         Close
       </rio-button>
+      <div class="username">
+        Conversation with {{participant.get('username')}}
+      </div>
       <div class="content">
-        {{participant.get('username')}}
         <div class="messages">
           <ul>
             <li *ngFor="let msg of getMessages()">

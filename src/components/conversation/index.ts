@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   Input,
 } from '@angular/core';
 
@@ -43,7 +44,11 @@ export class RioConversation {
 
   private messageSource = MessageSource;
 
-  constructor(private actions: ConversationActions) {}
+  constructor(
+    private actions: ConversationActions,
+    private element: ElementRef) {
+      debugger;
+    }
 
   private getMessages() {
     if (this.participant == null) {
@@ -56,6 +61,28 @@ export class RioConversation {
     }
 
     return messages.toJS();
+  }
+
+  private oldScroll: number;
+
+  private get messagesContainer() {
+    return this.element.nativeElement.querySelector('.messages');
+  }
+
+  private ngAfterContentInit () {
+    const container = this.messagesContainer;
+
+    container.scrollTop = container.scrollHeight;
+
+    const interval = 500;
+
+    // NOTE(cbond): The most horrendous autoscroll implementation y'all ever saw
+    setInterval(() => {
+      if (this.oldScroll != this.element.nativeElement.scrollHeight) {
+        this.oldScroll = container.scrollHeight;
+        container.scrollTop = container.scrollHeight;
+      }
+    }, interval);
   }
 
   private onClose() {
