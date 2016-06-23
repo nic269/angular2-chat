@@ -8,7 +8,10 @@
         Close
       </rio-button>
       <div class="username">
-        Conversation with {{participant.get('username')}}
+        Conversation with
+        <rio-presence-indicator [presence]="participant.get('presence')">
+        </rio-presence-indicator>
+        {{participant.get('username')}}
       </div>
       <div class="content">
         <div class="messages">

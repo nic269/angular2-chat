@@ -27,6 +27,8 @@ import {
   RioModalContent
 } from '../modal';
 
+import { RioPresenceIndicator } from '../contacts/presence-indicator';
+
 @Component({
   selector: 'rio-conversation',
   template: require('./index.tmpl.html'),
@@ -34,7 +36,8 @@ import {
   directives: [
     RioButton,
     RioModal,
-    RioModalContent
+    RioModalContent,
+    RioPresenceIndicator,
   ]
 })
 export class RioConversation {

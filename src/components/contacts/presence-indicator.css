@@ -1,0 +1,20 @@
+.presence {
+  border-radius: 100%;
+  display: inline-block;
+  height: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 20px;
+}
+
+.presence.online {
+  background-color: green;
+}
+
+.presence.offline {
+  background-color: darkgrey;
+}
+
+.presence.idle {
+  background-color: yellow;
+}

@@ -19,6 +19,7 @@ import {
 
 import { RioAddContactForm } from './add-contact-form';
 import { RioUserPresence } from './user-presence';
+import { RioPresenceIndicator } from './presence-indicator';
 import { RioRemoveContactConfirm } from './remove-contact-confirm';
 
 import {
@@ -26,6 +27,7 @@ import {
   ConcreteContact,
   Presence
 } from '../../contacts';
+
 import { Contacts } from '../../reducers/contacts';
 
 @Component({
@@ -38,12 +40,8 @@ import { Contacts } from '../../reducers/contacts';
       </rio-user-presence>
       <ul>
         <li *ngFor="let contact of (people$ | async)" class="status">
-          <div class="presence"
-            [ngClass]="{
-              'idle': contact.presence === presence.Idle,
-              'online': contact.presence === presence.Online,
-              'offline': contact.presence === presence.Offline}">
-          </div>
+          <rio-presence-indicator [presence]="contact.presence">
+          </rio-presence-indicator>
           <span class="username">{{contact.username}}</span>
           <ul class="actions">
             <li>
@@ -90,6 +88,7 @@ import { Contacts } from '../../reducers/contacts';
     RioModalContent,
     RioAddContactForm,
     RioUserPresence,
+    RioPresenceIndicator,
     RioRemoveContactConfirm,
   ],
   pipes: [AsyncPipe],
