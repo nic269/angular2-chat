@@ -12,7 +12,10 @@ import {
   MessageSource,
 } from '../actions/conversation';
 
-import { Contact } from '../contacts';
+import {
+  Contact,
+  Presence,
+} from '../contacts';
 
 import { SessionActions } from '../actions/session';
 
@@ -50,7 +53,12 @@ const conversationReducer = (state: Conversation = INITIAL_STATE, action) => {
     let participant = state.get('participant');
     if (!participant || participant.get('username') !== from) {
       participant = getContact(state, appState, 'people', from)
-                 || getContact(state, appState, 'availablePeople', from);
+                 || getContact(state, appState, 'availablePeople', from)
+                 || fromJS({
+                      username: from,
+                      messages: [],
+                      presence: Presence.Online,
+                    });
       state = state.set('participant', participant);
     }
 

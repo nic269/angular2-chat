@@ -1,13 +1,19 @@
-[![Circle CI](https://circleci.com/gh/rangle/angular2-redux-starter.svg?style=svg)](https://circleci.com/gh/rangle/angular2-redux-starter)
+[![Circle CI](https://circleci.com/gh/rangle/angular2-chat.svg?style=svg)](https://circleci.com/gh/rangle/angular2-chat)
 
-# Angular 2/TypeScript/Redux/Webpack Starter
+# Angular 2 real-time messaging application example
 
-This is the initial version of our starter project using Angular 2.x, Redux, TypeScript and Webpack to tie it all together.
+This is an example of an Angular 2 application using Redux and TypeScript.
+It is a real-time communication application that uses socket.io. To try,
+open several different web browsers (not the same browser instance! Use
+Chrome Canary and Chrome simultaneously, for example), log in, add a contact,
+and start messaging.
+
+Note that this was put together in a very short period, 2 days, and there
+are likely many oversights and things that are not fully fleshed out. (For
+example, contact presence is not fully baked). But as an example application,
+it serves its purpose.
 
 ## Getting Started
-
-Use our [starter script](http://npm.im/rangle-starter), with
-`angular2-redux-starter` as the `techStack` argument.
 
 ## npm scripts
 
@@ -61,27 +67,9 @@ This will run both code and style linters, but you can run them individually usi
 $ npm run cover
 ```
 
-#### Connecting to remote APIs
-
-Both the devmode and production servers provide a way to proxy requests to
-remote HTTP APIs.  This can be useful for working around CORS issues when
-developing your software.
-
-Edit [this file](server/proxy-config.js) to mount such APIs at a given path.
-
-## Improvements
-
-This is an initial version of this setup and will be expanded in the future. Refer to the [issues section](https://github.com/rangle/rangle-starter/issues) to see what needs to be done, or create a [new one](https://github.com/rangle/rangle-starter/issues/new).
-
-Issues for this particular starter project are tagged with the 'ng2' label.
-
 ## If something doesn't work
 
-We centralize issue management for all rangle starters in the [rangle-starter](https://github.com/rangle/rangle-starter) repository, to help us keep things consistent.
-
-Refer to the [issues section](https://github.com/rangle/rangle-starter/issues) to see if this has already been logged. Otherwise create a [new issue](https://github.com/rangle/rangle-starter/issues/new).
-
-Be sure to tag your new issue with the 'ng2' label so we can see which starter you're filing it for.
+Submit a PR! We would love to have your fix.
 
 ## Example Application
 
