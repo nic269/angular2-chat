@@ -13,6 +13,7 @@ import { List } from 'immutable';
 import { IAppState } from '../../reducers';
 import { RioInput } from '../form/input';
 import { FilteredPipe } from './filtered.pipe';
+import { RioPresenceIndicator } from './presence-indicator';
 import { Contacts } from '../../reducers/contacts';
 import { SelectEvent } from '../../actions/contacts';
 import {
@@ -24,7 +25,10 @@ import {
   selector: 'rio-searchable-list',
   template: require('./searchable-list.tmpl.html'),
   styles: [require('./searchable-list.css')],
-  directives: [RioInput],
+  directives: [
+    RioInput,
+    RioPresenceIndicator,
+  ],
   pipes: [FilteredPipe]
 })
 export class RioSearchableList {
