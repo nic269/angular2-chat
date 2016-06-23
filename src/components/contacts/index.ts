@@ -75,8 +75,11 @@ import { Contacts } from '../../reducers/contacts';
 
       <rio-modal *ngIf="removingContact">
         <rio-modal-content>
-          <remove-contact-confirm [contact]="removingContact">
-          </remove-contact-confirm>
+          <rio-remove-contact-confirm
+            [contact]="removingContact"
+            (cancel)="onCancelConfirm()"
+            (confirm)="onRemoveConfirm(removingContact)">
+          </rio-remove-contact-confirm>
         </rio-modal-content>
       </rio-modal>
     </div>
@@ -162,6 +165,10 @@ export class RioContacts {
 
   private onRemoveConfirm = (contact: Contact) => {
     this.removeContact.emit(contact);
+    this.removingContact = null;
+  }
+
+  private onCancelConfirm = () => {
     this.removingContact = null;
   }
 };
