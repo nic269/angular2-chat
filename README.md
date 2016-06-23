@@ -13,6 +13,17 @@ are likely many oversights and things that are not fully fleshed out. (For
 example, contact presence is not fully baked). But as an example application,
 it serves its purpose.
 
+Another note: the server uses MEMORY to store the list of users, as well as
+any other state it has. There is no persistance whatsoever (except in the
+browser, where redux state is persisted). Therefore if you restart NodeJS
+or modify any files in the server/ folder, you MUST re-log-in to the app
+otherwise you will start getting 401 Unauthorized on your web service calls.
+
+Also note, this application is not supposed to be the gold standard in Angular 2
+application development. We built this in a training class in order to illustrate
+how to use various Angular 2 features and bits of functionality. So do not look
+to this project as the authoritative voice on how to build your application.
+
 ## Getting Started
 
 ## npm scripts
