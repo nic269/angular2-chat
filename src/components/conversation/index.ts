@@ -73,4 +73,5 @@ export class RioConversation {
 
     event.currentTarget.value = '';
   }
-}
+};
+
