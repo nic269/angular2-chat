@@ -1,5 +1,5 @@
 :host .content {
-  min-height: 550px;
+  min-height: 500px;
   position: relative;
 }
 
@@ -10,11 +10,11 @@
 
 :host .messages {
   display: block;
-  min-height: 450px;
-  max-height: 450px;
-  width: 100%;
-  overflow: auto;
   margin-bottom: 10px;
+  max-height: 450px;
+  min-height: 450px;
+  overflow: auto;
+  width: 100%;
 }
 
 :host input[type='text'] {
