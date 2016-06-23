@@ -31,7 +31,7 @@ export class RioUserPresence {
 
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
-  ngOnInit() {
+  private update() {
     const p = presence => {
       switch (typeof presence) {
       default:
@@ -39,11 +39,23 @@ export class RioUserPresence {
       case 'number':
         return presence;
       case 'string':
-        return Presence[presence];
+        const n = parseInt(presence, 10);
+        if (isNaN(n)) {
+          return Presence[presence];
+        }
+        return n;
       }
     };
 
     this.state = p(this.ngRedux.getState().contacts.get('presence'));
+  }
+
+  private ngOnInit() {
+    this.update();
+  }
+
+  private ngOnChanges() {
+    this.update();
   }
 
   private onStateChanged(state: Presence) {

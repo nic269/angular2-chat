@@ -12,6 +12,8 @@ import {
   MessageSource,
 } from '../actions/conversation';
 
+import { ContactsActions } from '../actions/contacts';
+
 import {
   Contact,
   Presence,
@@ -72,6 +74,18 @@ const conversationReducer = (state: Conversation = INITIAL_STATE, action) => {
       return state.setIn(['participant', 'messages'],
         state.get('participant').get('messages').concat([m]));
     }
+    return state;
+
+  case ContactsActions.PRESENCE_PUBLISHED:
+    const {from: f, state: p} = action.payload;
+
+    const current = state.get('participant');
+    if (current) {
+      if (f === current.get('username')) {
+        return state.set('participant', current.set('presence', p));
+      }
+    }
+
     return state;
 
   case SessionActions.LOGOUT_USER:

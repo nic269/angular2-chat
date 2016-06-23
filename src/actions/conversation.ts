@@ -29,7 +29,7 @@ export class ConversationActions {
 
   constructor(private ngRedux: NgRedux<IAppState>,
               private realTime: RealTime) {
-    this.unsubscribe = this.realTime.subscribe(this.receive.bind(this));
+    this.unsubscribe = this.realTime.subscribeMessage(this.receive.bind(this));
   }
 
   open(contact: ConcreteContact) {

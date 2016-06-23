@@ -9,6 +9,8 @@ import {
   Presence,
 } from '../contacts';
 
+import { RealTime } from '../services/server/real-time';
+
 export interface SelectEvent {
   // The contact being selected or unselected
   contact: ConcreteContact;
@@ -31,10 +33,14 @@ export class ContactsActions {
   static REQUEST_AVAILABLE_CONTACTS = 'REQUEST_AVAILABLE_CONTACTS';
   static LIST_AVAILABLE_CONTACTS = 'LIST_AVAILABLE_CONTACTS';
   static LIST_AVAILABLE_CONTACTS_FAILED = 'LIST_AVAILABLE_CONTACTS_FAILED';
+  static PRESENCE_PUBLISHED = 'PRESENCE_PUBLISHED';
 
   constructor(
-    private ngRedux: NgRedux<IAppState>,
-    private service: ServerService) {}
+      private ngRedux: NgRedux<IAppState>,
+      private service: ServerService,
+      private realtime: RealTime) {
+    this.realtime.subscribePresence(this.presencePublished.bind(this));
+  }
 
   show() {
     this.ngRedux.dispatch({ type: ContactsActions.ADD_CONTACT });
@@ -135,6 +141,15 @@ export class ContactsActions {
     this.ngRedux.dispatch({
       type: ContactsActions.CHANGE_PRESENCE,
       payload: state,
+    });
+
+    this.realtime.publishPresence(state);
+  }
+
+  presencePublished(from: ConcreteContact, state: Presence) {
+    this.ngRedux.dispatch({
+      type: ContactsActions.PRESENCE_PUBLISHED,
+      payload: {from, state}
     });
   }
 }

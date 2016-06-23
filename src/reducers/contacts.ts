@@ -72,6 +72,29 @@ const addMessage = (state: Contacts, username: string,
     }));
 };
 
+const updatePresence =
+    (state: Contacts, username: string, presence: Presence) => {
+
+    const update = (list, index: number, person) => {
+      if (person.get('username') === username) {
+        list.update(index, v => v.set('presence', presence));
+      }
+    };
+
+    const keys = ['availablePeople', 'people'];
+
+    for (const k of keys) {
+      state = state.set(k,
+        state.get(k).withMutations(l => {
+          for (let i = 0; i < l.count(); ++i) {
+            update(l, i, l.get(i));
+          }
+        }));
+    }
+
+    return state;
+};
+
 const removeContact = (state: Contacts, username: string) => {
   const people: List<Contact> = state.get('people');
 
@@ -140,8 +163,13 @@ const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
 
   case ContactsActions.LIST_AVAILABLE_CONTACTS:
     return state
-            .setIn(['availablePeople'], fromJS(action.payload))
-            .mergeIn(['add'], { state: AddContactState.Idle });
+             .setIn(['availablePeople'], fromJS(action.payload))
+             .mergeIn(['add'], { state: AddContactState.Idle });
+
+  case ContactsActions.PRESENCE_PUBLISHED:
+    const {from, state: p} = action.payload;
+
+    return updatePresence(state, from, p);
 
   case ConversationActions.SEND_MESSAGE:
     const {source, message, contact} = action.payload;
