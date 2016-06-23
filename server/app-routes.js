@@ -3,14 +3,14 @@
 module.exports = function(app, users) {
   const getUser = request => {
     const token = request.headers['authentication-token'];
-    if (token == null || token.length === 0) {
+    if (!token) {
       return null;
     }
 
     const matchingUser = Object.keys(users)
       .map(k => users[k])
       .find(u => u.token === token);
-    if (matchingUser == null) {
+    if (!matchingUser) {
       return null;
     }
 
@@ -18,14 +18,14 @@ module.exports = function(app, users) {
   };
 
   const bu = fn => {
-    return function (req, response) {
+    return function(req, response) {
       const user = getUser(req);
-      if (user == null) {
+      if (!user) {
         response.sendStatus(401);
+        return null;
       }
-      else {
-        return fn(user, req, response);
-      }
+
+      return fn(user, req, response);
     };
   };
 

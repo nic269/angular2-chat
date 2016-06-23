@@ -14,13 +14,12 @@ module.exports = {
     return new Promise(resolve => {
       if (users.hasOwnProperty(username)) {
         resolve(users[username]);
-      }
-      else {
+      } else {
         const token = generateToken(users);
-  
+
         // NOTE(cbond): If the user has just logged in, they must be online
         const presence = 'Online';
-  
+
         const result = {
           id: username,
           name,
@@ -29,9 +28,9 @@ module.exports = {
           token,
           contacts: [],
         };
-  
+
         users[username] = result;
-  
+
         resolve(result);
       }
     });
