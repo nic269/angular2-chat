@@ -63,8 +63,7 @@ const addMessage = (state: Contacts, username: string,
           messages: [m],
           presence: Presence.Online,
         }));
-      }
-      else {
+      } else {
         p.update(index, v =>
           v.mergeDeep(fromJS({
             messages: p.get(index).get('messages').concat([m])
