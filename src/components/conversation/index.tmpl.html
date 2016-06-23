@@ -12,7 +12,7 @@
         <div class="messages">
           <ul>
             <li *ngFor="let msg of messages">
-              <div className="from">
+              <div class="from">
                 <span *ngIf="msg.source == messageSource.Local">
                   me
                 </span>
@@ -20,7 +20,7 @@
                   {{(participant$ | async).username}}
                 </span>
               </div>
-              <div className="text">{{msg.text}}</div>
+              <div class="text">{{msg.text}}</div>
             </li>
           </ul>
         </div>
