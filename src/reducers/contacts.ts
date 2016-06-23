@@ -57,7 +57,10 @@ const addMessage = (state: Contacts, username: string,
   return state.set('people',
     people.withMutations(p => {
       const index = p.findIndex(c => c.get('username') === username);
-      p.update(index, v => v.mergeDeep(fromJS({ messages: [m] })));
+      p.update(index, v =>
+        v.mergeDeep(fromJS({
+          messages: p.get(index).get('messages').concat([m])
+        })));
     }));
 };
 

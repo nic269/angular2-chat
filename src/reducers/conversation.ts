@@ -26,7 +26,8 @@ const conversationReducer = (state: Conversation = INITIAL_STATE, action) => {
 
     const m = { source: MessageSource.Local, message };
 
-    return state.mergeDeepIn(['participant'], fromJS({ messages: [m] }));
+    return state.setIn(['participant', 'messages'],
+      state.get('participant').get('messages').concat([m]));
 
   case SessionActions.LOGOUT_USER:
     return state.merge(INITIAL_STATE);

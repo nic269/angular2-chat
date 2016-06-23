@@ -64,6 +64,9 @@ export class RioConversation {
 
   private onSend(event, contact) {
     const message = event.currentTarget.value;
+    if (!message) {
+      return;
+    }
 
     event.currentTarget.value = '';
 
