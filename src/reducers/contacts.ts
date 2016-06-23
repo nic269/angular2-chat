@@ -142,6 +142,12 @@ const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
 
     return addMessage(state, username, source, message);
 
+  case ConversationActions.RECEIVE_MESSAGE:
+    return addMessage(state,
+      action.payload.from,
+      MessageSource.Remote,
+      action.payload.text);
+
   case SessionActions.LOGIN_USER_SUCCESS:
     const {contacts, presence} = action.payload;
 

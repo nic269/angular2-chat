@@ -24,7 +24,7 @@ export class ConversationActions {
   static CLOSE_CONVERSATION = 'CLOSE_CONVERSATION';
   static SEND_MESSAGE = 'SEND_MESSAGE';
   static RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
-  
+
   unsubscribe: Function = () => {};
 
   constructor(private ngRedux: NgRedux<IAppState>,
@@ -52,10 +52,9 @@ export class ConversationActions {
   }
 
   receive(payload) {
-    console.log('received message', payload);
     this.ngRedux.dispatch({
       type: ConversationActions.RECEIVE_MESSAGE,
-      payload,
+      payload: Object.assign({}, payload, {appState: this.ngRedux.getState()})
     });
   }
 

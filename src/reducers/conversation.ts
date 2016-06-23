@@ -1,9 +1,18 @@
-import { Map, fromJS } from 'immutable';
+import {
+  List,
+  Map,
+  fromJS
+} from 'immutable';
+import { NgRedux } from 'ng2-redux';
+
+import { IAppState } from '../reducers';
 
 import {
   ConversationActions,
   MessageSource,
 } from '../actions/conversation';
+
+import { Contact } from '../contacts';
 
 import { SessionActions } from '../actions/session';
 
@@ -12,6 +21,12 @@ const INITIAL_STATE = fromJS({
 });
 
 export type Conversation = Map<string, any>;
+
+export const getContact =
+    (state: Conversation, appState: IAppState, key: string, from: string) => {
+  const contacts: List<Contact> = appState.contacts.get(key);
+  return contacts.find(k => k.get('username') === from);
+};
 
 const conversationReducer = (state: Conversation = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -30,12 +45,17 @@ const conversationReducer = (state: Conversation = INITIAL_STATE, action) => {
       state.get('participant').get('messages').concat([m]));
 
   case ConversationActions.RECEIVE_MESSAGE:
-    const participant = state.get('participant');
-    if (!participant) {
-      return state;
+    const {appState, from} = action.payload;
+
+    let participant = state.get('participant');
+    if (!participant || participant.get('username') !== from) {
+      participant = getContact(state, appState, 'people', from)
+                 || getContact(state, appState, 'availablePeople', from);
+      state = state.set('participant', participant);
     }
+
     const username = participant.get('username');
-    if (action.payload.from === username) {
+    if (from === username) {
       const m = {
         source: MessageSource.Remote,
         message: action.payload.text
