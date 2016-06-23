@@ -19,7 +19,6 @@ export enum MessageSource {
 }
 
 export interface Message {
-  source: MessageSource;
   text: string;
 };
 

@@ -3,11 +3,15 @@ import { Injectable } from '@angular/core';
 import { NgRedux } from 'ng2-redux';
 
 import { IAppState } from '../reducers';
+
 import {
+  Contact,
   ConcreteContact,
   MessageSource,
   Message
 } from '../contacts';
+
+import { RealTime } from '../services/server';
 
 export {
   MessageSource,
@@ -19,8 +23,14 @@ export class ConversationActions {
   static OPEN_CONVERSATION = 'OPEN_CONVERSATION';
   static CLOSE_CONVERSATION = 'CLOSE_CONVERSATION';
   static SEND_MESSAGE = 'SEND_MESSAGE';
+  static RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
+  
+  unsubscribe: Function = () => {};
 
-  constructor(private ngRedux: NgRedux<IAppState>) {}
+  constructor(private ngRedux: NgRedux<IAppState>,
+              private realTime: RealTime) {
+    this.unsubscribe = this.realTime.subscribe(this.receive.bind(this));
+  }
 
   open(contact: ConcreteContact) {
     this.ngRedux.dispatch({
@@ -29,7 +39,8 @@ export class ConversationActions {
     });
   }
 
-  send(contact: ConcreteContact, message: string) {
+  send(contact: Contact, message: string) {
+    this.realTime.sendMessage(contact.get('username'), message);
     this.ngRedux.dispatch({
       type: ConversationActions.SEND_MESSAGE,
       payload: {
@@ -37,6 +48,14 @@ export class ConversationActions {
         contact,
         message
       }
+    });
+  }
+
+  receive(payload) {
+    console.log('received message', payload);
+    this.ngRedux.dispatch({
+      type: ConversationActions.RECEIVE_MESSAGE,
+      payload,
     });
   }
 
