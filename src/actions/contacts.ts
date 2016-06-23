@@ -26,6 +26,7 @@ export class ContactsActions {
   static ADD_CONTACT_COMPLETE = 'ADD_CONTACT_COMPLETE';
   static ADD_CONTACT_PENDING = 'ADD_CONTACT_PENDING';
   static ADD_CONTACT_ERROR = 'ADD_CONTACT_ERROR';
+  static DELETE_CONTACT = 'DELETE_CONTACT';
   static CHANGE_PRESENCE = 'CHANGE_PRESENCE';
   static REQUEST_AVAILABLE_CONTACTS = 'REQUEST_AVAILABLE_CONTACTS';
   static LIST_AVAILABLE_CONTACTS = 'LIST_AVAILABLE_CONTACTS';
@@ -111,8 +112,18 @@ export class ContactsActions {
       }));
   }
 
-  removeContact(contact: Contact) {
-    debugger;
+  removeContact(contact: ConcreteContact) {
+    const promise = this.service
+      .deleteSingle('/contacts/delete', contact.username);
+
+    promise
+      .then(() => this.ngRedux.dispatch({
+        type: ContactsActions.DELETE_CONTACT,
+        payload: contact.username
+      }))
+      .catch(err => {
+        console.error('Failed to delete contact', err);
+      });
   }
 
   changePresence(state: Presence) {

@@ -64,6 +64,15 @@ const addMessage = (state: Contacts, username: string,
     }));
 };
 
+const removeContact = (state: Contacts, username: string) => {
+  const people: List<Contact> = state.get('people');
+
+  return state.set('people',
+    people.withMutations(p => {
+      p.delete(p.findIndex(c => c.get('username') === username));
+    }));
+};
+
 const def = {type: '', payload: null};
 
 const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
@@ -107,6 +116,9 @@ const contactsReducer = (state: Contacts = INITIAL_STATE, action = def) => {
       failure: action.payload,
       state: AddContactState.Failed
     });
+
+  case ContactsActions.DELETE_CONTACT:
+    return removeContact(state, action.payload);
 
   case ContactsActions.REQUEST_AVAILABLE_CONTACTS:
     return state.mergeIn(['add'], {

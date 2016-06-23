@@ -37,6 +37,17 @@ module.exports = function routes(app, users) {
     response.send({});
   }));
 
+  app.delete('/api/contacts/delete/:username',
+    bu((user, req, response) => {
+      const username = req.params.username;
+      const contacts = users[user].contacts || [];
+
+      const index = contacts.findIndex(u => u.username === username);
+      contacts.splice(index, 1);
+
+      response.send({});
+    }));
+
   app.get('/api/contacts/list', bu((user, req, response) => {
     const list = Object.keys(users).map( // remove security token
       key => Object.assign({}, users[key], { token: undefined }));

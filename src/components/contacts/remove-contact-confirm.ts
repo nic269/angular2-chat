@@ -14,14 +14,17 @@ import { ConcreteContact } from '../../contacts';
       Are you sure you would like to remove
       {{contact.username}} from your contacts?
 
-      <button (click)="onConfirm" class="btn btn-primary">
-        OK
-      </button>
-      <button (click)="onCancel" class="btn">
-        Cancel
-      </button>
+      <div class="actions">
+        <button (click)="onConfirm()" class="btn btn-primary">
+          OK
+        </button>
+        <button (click)="onCancel()" class="btn">
+          Cancel
+        </button>
+      </div>
     </div>
-  `
+  `,
+  styles: [require('./remove-contact-confirm.css')]
 })
 export class RioRemoveContactConfirm {
   @Input() private contact: ConcreteContact;
