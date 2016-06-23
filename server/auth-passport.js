@@ -27,6 +27,7 @@ module.exports = {
           username,
           token,
           contacts: [],
+          messages: []
         };
 
         users[username] = result;

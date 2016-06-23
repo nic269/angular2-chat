@@ -1,6 +1,10 @@
 import { Map, fromJS } from 'immutable';
 
-import { ConversationActions } from '../actions/conversation';
+import {
+  ConversationActions,
+  MessageSource,
+} from '../actions/conversation';
+
 import { SessionActions } from '../actions/session';
 
 const INITIAL_STATE = fromJS({
@@ -16,6 +20,13 @@ const conversationReducer = (state: Conversation = INITIAL_STATE, action) => {
 
   case ConversationActions.CLOSE_CONVERSATION:
     return state.delete('participant');
+
+  case ConversationActions.SEND_MESSAGE:
+    const {message} = action.payload;
+
+    const m = { source: MessageSource.Local, message };
+
+    return state.mergeDeepIn(['participant'], fromJS({ messages: [m] }));
 
   case SessionActions.LOGOUT_USER:
     return state.merge(INITIAL_STATE);

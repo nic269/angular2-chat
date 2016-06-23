@@ -1,5 +1,5 @@
 <div>
-  <rio-modal *ngIf="participant$ | async">
+  <rio-modal>
     <rio-modal-content>
       <rio-button
         qaid="qa-close-button"
@@ -8,26 +8,26 @@
         Close
       </rio-button>
       <div class="content">
-        {{(participant$ | async).username}}
+        {{participant.get('username')}}
         <div class="messages">
           <ul>
-            <li *ngFor="let msg of messages">
+            <li *ngFor="let msg of getMessages()">
               <div class="from">
                 <span *ngIf="msg.source == messageSource.Local">
                   me
                 </span>
                 <span *ngIf="msg.source == messageSource.Remote">
-                  {{(participant$ | async).username}}
+                  {{participant.get('username')}}
                 </span>
               </div>
-              <div class="text">{{msg.text}}</div>
+              <div class="text">{{msg.message}}</div>
             </li>
           </ul>
         </div>
         <input
           placeholder="Type a message"
           type="text"
-          (keyup.enter)="onSend($event)" />
+          (keyup.enter)="onSend($event, participant)" />
       </div>
     </rio-modal-content>
   </rio-modal>
