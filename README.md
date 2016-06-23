@@ -9,9 +9,8 @@ Chrome Canary and Chrome simultaneously, for example), log in, add a contact,
 and start messaging.
 
 Note that this was put together in a very short period, 2 days, and there
-are likely many oversights and things that are not fully fleshed out. (For
-example, contact presence is not fully baked). But as an example application,
-it serves its purpose.
+are likely many oversights and things that are not fully fleshed out.But
+as an example application, it serves its purpose.
 
 Another note: the server uses MEMORY to store the list of users, as well as
 any other state it has. There is no persistance whatsoever (except in the
