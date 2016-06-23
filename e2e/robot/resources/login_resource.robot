@@ -24,7 +24,7 @@ ${USERNAME VALIDATION}  id=qa-uname-validation
 ${PASSWORD VALIDATION}  id=qa-password-validation
 ${ALERT VALIDATION}  id=qa-alert
 
-${COUNTER HEADING}  id=qa-counter-heading
+${LOGOUT}  id=qa-logout-button
 
 *** Keywords ***
 Open Browser To Login Page
@@ -58,8 +58,7 @@ Click Login
 	Click Element  ${LOGIN BUTTON}
 
 Verify user is successfully logged in
-	Wait Until Element Is Visible  ${COUNTER HEADING}
-	Element Text Should Be  ${COUNTER HEADING}  COUNTER
+	Wait Until Element Is Visible  ${LOGOUT}
 
 Verify Username Validation
     [Arguments]  ${userValidation}
