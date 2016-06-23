@@ -51,13 +51,10 @@ export class RioSearchableList {
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
   private filter() {
-    const existingContacts = this.ngRedux.getState()
+    const existing = this.ngRedux.getState()
       .contacts.get('people').toJS();
 
-    this.filteredList = this.pipe.transform(
-      this.list,
-      existingContacts,
-      this.search || '');
+    this.filteredList = this.pipe.transform(this.list, existing, this.search);
   }
 
   private ngOnChanges() {
