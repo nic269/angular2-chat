@@ -76,7 +76,7 @@ export class RioConversation {
 
     // NOTE(cbond): The most horrendous autoscroll implementation y'all ever saw
     setInterval(() => {
-      if (this.oldScroll != this.element.nativeElement.scrollHeight) {
+      if (this.oldScroll !== this.element.nativeElement.scrollHeight) {
         this.oldScroll = container.scrollHeight;
         container.scrollTop = container.scrollHeight;
       }

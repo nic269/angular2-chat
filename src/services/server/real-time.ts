@@ -19,5 +19,11 @@ export class RealTime {
     }
 
     console.log('real time engine started');
+    
+    // delete this and implement send/subscribes
+    setInterval(() => {
+      console.log('Emitting Test Message');
+      this.socket.emit('message', { message: 'TEST' } ); 
+    }, 5000);
   }
 }
