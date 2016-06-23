@@ -52,9 +52,22 @@ export class ConversationActions {
   }
 
   receive(payload) {
+    const state = this.ngRedux.getState();
+
+    const target = payload.username;
+
+    const me = state.session
+      .get('user')
+      .get('username');
+
+    if (target !== me) {
+      console.log('Ignoring message not destined for me');
+      return;
+    }
+
     this.ngRedux.dispatch({
       type: ConversationActions.RECEIVE_MESSAGE,
-      payload: Object.assign({}, payload, {appState: this.ngRedux.getState()})
+      payload: Object.assign({}, payload, {appState: state})
     });
   }
 
