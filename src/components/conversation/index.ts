@@ -46,9 +46,7 @@ export class RioConversation {
 
   constructor(
     private actions: ConversationActions,
-    private element: ElementRef) {
-      debugger;
-    }
+    private element: ElementRef) {}
 
   private getMessages() {
     if (this.participant == null) {
