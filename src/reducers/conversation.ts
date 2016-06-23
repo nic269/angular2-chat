@@ -28,6 +28,24 @@ const conversationReducer = (state: Conversation = INITIAL_STATE, action) => {
 
     return state.setIn(['participant', 'messages'],
       state.get('participant').get('messages').concat([m]));
+    
+  case ConversationActions.RECEIVE_MESSAGE:
+    const participant = state.get('participant');
+    if (!participant) {
+      return state 
+    }
+    const username = participant.get('username');
+    if (action.payload.from === username) {
+      const m = { 
+        source: MessageSource.Remote, 
+        message: action.payload.text 
+      };
+
+      return state.setIn(['participant', 'messages'], 
+        state.get('participant').get('messages').concat([m]));
+    } else {
+      return state;
+    }
 
   case SessionActions.LOGOUT_USER:
     return state.merge(INITIAL_STATE);

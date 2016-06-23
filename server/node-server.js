@@ -79,4 +79,4 @@ const server = app.listen(PORT, (err) => {
 const io = require('socket.io')(server);
 
 // Start the realtime engine
-appRealTime(app, io);
+appRealTime(app, io, users);
